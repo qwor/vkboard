@@ -38,14 +38,20 @@ class VkController extends Controller
 
     public function search(Request $request)
     {
+        $q = $request->q;
+        $tags = json_decode($request->tags);
+        foreach($tags as $tag) {
+            error_log($tag->value);
+            $q .= ' #'.$tag->value;
+        }
         $data = $this->vk->newsfeed()->search($this->token, [
-                'q' => $request->q,
+                'q' => $q,
                 'count' => $request->postCount,
                 'start_time' => strtotime($request->startDate),
                 'end_time' => strtotime($request->endDate)
         ]);
         $search_params = [
-            'q' => $request->q,
+            'q' => $q,
             'postCount' => $request->postCount,
             'startDate' => $request->startDate,
             'endDate' => $request->endDate,
