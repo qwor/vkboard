@@ -4,20 +4,27 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            @empty($data['items'])
-            <h4>{{__('No posts found')}}</h4>
-            @endempty
+            <div class="user-profile bg-white">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 ms-3">
+                        <img src="{{ $profiles[$profile_id]->photo}}" alt="user" class="profile-photo-lg">
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <h5 class="profile-link">{{ $profiles[$profile_id]->name }}</h5>
+                        <p>{{ $profiles[$profile_id]->screen_name }}</p>
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <button class="btn btn-primary pull-right">{{__('Favorite')}}</button>
+                    </div>
+                </div>
+            </div>
             @foreach ($data['items'] as $item)
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="media mb-3 d-flex">
                         <img src="{{$profiles[$item['owner_id']]->photo}}" class="d-block ui-w-40 rounded-circle" alt="">
                         <div class="media-body ms-3">
-                            @if ($profiles[$item['owner_id']]->is_closed)
-                            <span>{{ $profiles[$item['owner_id']]->name }}</span>
-                            @else
                             <a class="link-primary" href="{{ route('profile', ['profile_id' => $item['owner_id']]) }}" target="_blank">{{ $profiles[$item['owner_id']]->name }}</a>
-                            @endif
                             <div class="text-muted small">{{ date("d.m.y", $item['date']) }}</div>
                         </div>
                     </div>
@@ -34,11 +41,9 @@
                 </div>
             </div>
             @endforeach
-            @isset($search_params['start_from'])
-            <a class="btn btn-success" href="{{ route('feed.get', ['search_params' => $search_params])}}">
+            <a class="btn btn-success" href="{{ route('profile.nextPage', ['profile_id' => $profile_id, 'offset' => $offset])}}">
                 {{ __('Next page')}}
             </a>
-            @endisset
         </div>
     </div>
 </div>
