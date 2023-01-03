@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\FilterController;
+use App\Http\Controllers\GroupWallController;
+use App\Http\Controllers\UserWallController;
 use App\Http\Controllers\VkController;
 use ATehnix\VkClient\Auth;
 use Illuminate\Http\Request;
@@ -20,27 +23,39 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/feed', [VkController::class, 'search'])
+Route::get('/feed/{filter}', [VkController::class, 'search'])
     ->middleware('auth')
-    ->name('feed.post');
+    ->name('feed.show');
 
-Route::get('/feed', [VkController::class, 'feedNextPage'])
+Route::get('/feed_next', [VkController::class, 'feedNextPage'])
     ->middleware('auth')
-    ->name('feed.get');
+    ->name('feed.nextPage');
 
 Route::get('/search', [VkController::class, 'show'])
     ->middleware('auth');
 
-Route::get('/profile/{profile_id}', [VkController::class, 'profile'])
+Route::get('/wall/{wall}', [VkController::class, 'wall'])
     ->middleware('auth')
-    ->name('profile')
-    ->where('profile_id', '[A-Za-z0-9-]+');
+    ->name('wall')
+    ->where('wall', '[A-Za-z0-9-]+');
 
-Route::get('/profile/{profile_id}/nextPage', [VkController::class, 'profileNextPage'])
+Route::get('/wall/{wall}/nextPage', [VkController::class, 'wallNextPage'])
     ->middleware('auth')
-    ->name('profile.nextPage')
-    ->where('profile_id', '[A-Za-z0-9-]+');
+    ->name('wall.nextPage')
+    ->where('wall', '[A-Za-z0-9-]+');
 
+
+Route::resource('filters', FilterController::class)
+    ->only('index', 'create', 'store', 'edit', 'update', 'destroy')
+    ->middleware('auth');
+
+Route::resource('userWalls', UserWallController::class)
+    ->only('index', 'store', 'destroy')
+    ->middleware('auth');
+
+Route::resource('groupWalls', GroupWallController::class)
+    ->only('index', 'store', 'destroy')
+    ->middleware('auth');
 
 Illuminate\Support\Facades\Auth::routes();
 

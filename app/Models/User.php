@@ -42,4 +42,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function filters()
+    {
+        return $this->hasMany(Filter::class);
+    }
+
+    public function userWalls()
+    {
+        return $this->hasMany(UserWall::class);
+    }
+
+    public function groupWalls()
+    {
+        return $this->hasMany(GroupWall::class);
+    }
 }

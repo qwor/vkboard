@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>VkBoard</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -15,8 +15,9 @@
     <script src="https://kit.fontawesome.com/2096e10655.js" crossorigin="anonymous"></script>
 
     <!-- Scripts -->
-    @stack('head')
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+    @stack('head')
+
 </head>
 <body>
     <div id="app">
@@ -32,8 +33,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item  {{ Route::is('/search') ? 'active' : '' }}">
-                            <a class="nav-link" href="/search">{{ __('Search') }}</a>
+                        <li class="nav-item ms-2">
+                            <a class="nav-link" href="{{ route('filters.index') }}">{{ __('Filters') }}</a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a class="nav-link" href="{{ route('userWalls.index') }}">{{ __('Users') }}</a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a class="nav-link" href="{{ route('groupWalls.index') }}">{{ __('Groups') }}</a>
                         </li>
                     </ul>
 

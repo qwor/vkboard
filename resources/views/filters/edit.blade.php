@@ -1,36 +1,42 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <h2>{{__('Edit filter')}}</h2>
             <div class="card">
-                <div class="card-header">{{ __('Search posts') }}</div>
                 <div class="card-body">
-                    <form action="{{ route('feed.post') }}" method="post" target="_blank">
+                    <form method="POST" action="{{ route('filters.update', $filter) }}">
                         @csrf
+                        @method('patch')
+                        <div class="form-group">
+                            <label for="nameInput">{{__('Name')}}</label>
+                            <input type="text" class="form-control" name="name" id="name_input" value="{{ $filter->name }}" required>
+                        </div>
                         <div class="form-group">
                             <label for="queryInput">{{__('Query')}}</label>
-                            <textarea class="form-control" name="q" id="queryInput" rows="3" required></textarea>
+                            <textarea class="form-control" name="q" id="query_input" rows="3" required>{{ $filter->q }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="tagInput">{{__('Tags')}}</label>
-                            <input type="text" class="form-control" name="tags" id="tagInput">
+                            <input type="text" class="form-control" name="tags" id="tagInput" value="{{ $filter->tags }}">
                         </div>
                         <div class="form-group">
                             <label for="startDateInput">{{__('Start date')}}</label>
-                            <input type="date" class="form-control" name="startDate" id="startDateInput">
+                            <input type="date" class="form-control" name="start_date" id="startDateInput" value="{{ $filter->start_date }}">
                         </div>
                         <div class="form-group">
                             <label for="endDateInput">{{__('End date')}}</label>
-                            <input type="date" class="form-control" name="endDate" id="endtDateInput">
+                            <input type="date" class="form-control" name="end_date" id="endtDateInput" value="{{ $filter->end_date }}">
                         </div>
                         <div class="form-group">
                             <label for="countInput">{{__('Number of posts per page')}}</label>
-                            <input type="number" class="form-control" name="postCount" value='20' id="countInput">
+                            <input type="number" class="form-control" name="count" value='20' id="countInput" value="{{ $filter->count }}">
                         </div>
                         <div class="form-group mt-2">
-                            <button type="submit" class="btn btn-primary mt-3">{{__('Search')}}</button>
+                            <button type="submit" class="btn btn-primary mt-3">{{__('Edit')}}</button>
                         </div>
                     </form>
                 </div>

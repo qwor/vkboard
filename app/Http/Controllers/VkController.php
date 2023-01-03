@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 //use ATehnix\VkClient\Client;
 //use ATehnix\VkClient\Exceptions\VkException;
 
+use App\Models\Filter;
+use App\Models\GroupWall;
+use App\Models\UserWall;
 use VK;
 use VK\Client\VKApiClient;
 use http\Env\Response;
@@ -79,10 +82,11 @@ class VkController extends Controller
         return view('search');
     }
 
-    public function search(Request $request)
+    public function search($filter_id)
     {
-        $q = $request->q;
-        $tags = json_decode($request->tags);
+        $filter = Filter::find($filter_id);
+        $q = $filter->q;
+        $tags = json_decode($filter->tags);
         if (!is_null($tags)) {
             foreach($tags as $tag) {
                 error_log($tag->value);
@@ -91,35 +95,51 @@ class VkController extends Controller
         }
         $search_params = [
             'q' => $q,
-            'count' => $request->postCount,
-            'start_time' => strtotime($request->startDate),
-            'end_time' => strtotime($request->endDate),
+            'count' => $filter->count,
+            'start_time' => strtotime($filter->start_date),
+            'end_time' => strtotime($filter->end_date),
             'extended' => 1
         ];
 
         return $this->vkFeedHelper($search_params);
     }
 
-    public function profile(Request $request, $profile_id)
+    public function wall(Request $request, $wall_id)
     {
         $data = $this->vk->wall()->get($this->token, [
-            'owner_id' => $profile_id,
+            'owner_id' => $wall_id,
             'extended' => 1,
             'count' => 20
         ]);
         $profiles = $this->makeProfiles($data);
+
+        $known = false;
+        $userWall = UserWall::where('wall_id', '=', $wall_id)
+            ->where('user_id', '=', $request->user()->id)
+            ->first();
+
         $view_data = [
             'data' => $data,
             'profiles' => $profiles,
-            'profile_id' => $profile_id,
+            'wall_id' => $wall_id,
             'offset' => 0,
-            'type' => 'user'
+            'type' => 'user',
+            'known' => !is_null($userWall)
         ];
-        if ($profile_id[0] == '-')
+        if ($wall_id[0] == '-')
         {
             $view_data['type'] = 'group';
+            $groupWall = GroupWall::where('wall_id', '=', $wall_id)
+                ->where('user_id', '=', $request->user()->id)
+                ->first();
+            $view_data['known'] = !is_null($groupWall);
+        } else {
+            $userWall = UserWall::where('wall_id', '=', $wall_id)
+                ->where('user_id', '=', $request->user()->id)
+                ->first();
+            $view_data['known'] = !is_null($userWall);
         }
-        return view('profile', $view_data);
+        return view('wall', $view_data);
     }
 
     public function feedNextPage(Request $request)
@@ -128,11 +148,11 @@ class VkController extends Controller
         return $this->vkFeedHelper($search_params);
     }
 
-    public function profileNextPage(Request $request, $profile_id)
+    public function wallNextPage(Request $request, $wall_id)
     {
         $offset = $request->offset + 20;
         $data = $this->vk->wall()->get($this->token, [
-            'owner_id' => $profile_id,
+            'owner_id' => $wall_id,
             'extended' => 1,
             'count' => 20,
             'offset' => $offset
@@ -141,14 +161,22 @@ class VkController extends Controller
         $view_data = [
             'data' => $data,
             'profiles' => $profiles,
-            'profile_id' => $profile_id,
+            'wall_id' => $wall_id,
             'offset' => $offset,
             'type' => 'user'
         ];
-        if ($profile_id[0] == '-')
-        {
+        if ($wall_id[0] == '-') {
             $view_data['type'] = 'group';
+            $groupWall = GroupWall::where('wall_id', '=', $wall_id)
+                ->where('user_id', '=', $request->user()->id)
+                ->first();
+            $view_data['known'] = !is_null($groupWall);
+        } else {
+            $userWall = UserWall::where('wall_id', '=', $wall_id)
+                ->where('user_id', '=', $request->user()->id)
+                ->first();
+            $view_data['known'] = !is_null($userWall);
         }
-        return view('profile', $view_data);
+        return view('wall', $view_data);
     }
 }

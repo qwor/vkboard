@@ -16,7 +16,7 @@
                             @if ($profiles[$item['owner_id']]->is_closed)
                             <span>{{ $profiles[$item['owner_id']]->name }}</span>
                             @else
-                            <a class="link-primary" href="{{ route('profile', ['profile_id' => $item['owner_id']]) }}" target="_blank">{{ $profiles[$item['owner_id']]->name }}</a>
+                            <a class="link-primary" href="{{ route('wall', ['wall' => $item['owner_id']]) }}" target="_blank">{{ $profiles[$item['owner_id']]->name }}</a>
                             @endif
                             <div class="text-muted small">{{ date("d.m.y", $item['date']) }}</div>
                         </div>
@@ -30,15 +30,14 @@
                 </div>
                 <div class="card-footer">
                     <span><strong>{{ $item['likes']['count'] }}</strong> <i class="fa-regular fa-heart"></i></span>
-<!--                    <span><strong>123</strong> <i class="fa-regular fa-heart"></i></span>-->
                 </div>
             </div>
             @endforeach
-            @isset($search_params['start_from'])
-            <a class="btn btn-success" href="{{ route('feed.get', ['search_params' => $search_params])}}">
+            @if (!is_null($search_params) && !is_null($search_params['start_from']))
+            <a class="btn btn-success" href="{{ route('feed.nextPage', ['search_params' => $search_params]) }}">
                 {{ __('Next page')}}
             </a>
-            @endisset
+            @endif
         </div>
     </div>
 </div>
