@@ -8,10 +8,10 @@
             <h2>{{__('New filter')}}</h2>
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('filters.store') }}" method="post">
+                    <form action="{{ route('filters.store') }}" method="post" autocomplete="off">
                         @csrf
                         <div class="form-group">
-                            <label for="nameInput">{{__('Name')}}</label>
+                            <label for="nameInput">{{__('Filter name')}}</label>
                             <input type="text" class="form-control" name="name" id="name_input" required>
                         </div>
                         <div class="form-group">
@@ -20,7 +20,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tagInput">{{__('Tags')}}</label>
-                            <input type="text" class="form-control" name="tags" id="tagInput">
+                            <input type="text" class="form-control" name="tags" id="tagInput"">
                         </div>
                         <div class="form-group">
                             <label for="startDateInput">{{__('Start date')}}</label>
@@ -45,12 +45,15 @@
 </div>
 <script>
     let input = document.querySelector('input[name=tags]');
-    new Tagify(input, input)
+    let tagInput = new Tagify(input, {
+        id: 'tagInput',
+    });
+    tagInput.removeAllTags();
 </script>
 @endsection
 
 @push('head')
-<link rel="stylesheet" href="../node_modules/@yaireo/tagify/dist/tagify.css">
-<script src="https://unpkg.com/@yaireo/tagify"></script>
-<script src="https://unpkg.com/@yaireo/tagify@3.1.0/dist/tagify.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 @endpush

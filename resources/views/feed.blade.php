@@ -33,11 +33,11 @@
                 </div>
             </div>
             @endforeach
-            @if (!is_null($search_params) && !is_null($search_params['start_from']))
+            @isset($search_params['start_from']))
             <a class="btn btn-success" href="{{ route('feed.nextPage', ['search_params' => $search_params]) }}">
                 {{ __('Next page')}}
             </a>
-            @endif
+            @endisset
         </div>
     </div>
 </div>

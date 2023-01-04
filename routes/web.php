@@ -19,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', 'filters');
 
 Route::get('/feed/{filter}', [VkController::class, 'search'])
     ->middleware('auth')
@@ -57,6 +55,6 @@ Route::resource('groupWalls', GroupWallController::class)
     ->only('index', 'store', 'destroy')
     ->middleware('auth');
 
-Illuminate\Support\Facades\Auth::routes();
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Illuminate\Support\Facades\Auth::routes();
