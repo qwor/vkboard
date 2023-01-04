@@ -21,7 +21,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tagInput">{{__('Tags')}}</label>
-                            <input type="text" class="form-control" name="tags" id="tagInput" value="{{ $filter->tags }}">
+                            <input type="text" class="form-control" name="tags" id="tagInput" value="">
                         </div>
                         <div class="form-group">
                             <label for="startDateInput">{{__('Start date')}}</label>
@@ -46,7 +46,11 @@
 </div>
 <script>
     let input = document.querySelector('input[name=tags]');
-    new Tagify(input, input)
+    let tagInput = new Tagify(input, {
+        id: 'tagInput',
+    });
+    tagInput.removeAllTags();
+    tagInput.addTags(['{{$filter->tags_tagify}}']);
 </script>
 @endsection
 

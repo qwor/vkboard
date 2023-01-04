@@ -61,6 +61,15 @@ class FilterController extends Controller
     public function edit(Filter $filter)
     {
         $this->authorize('update', $filter);
+        $tag_str = '';
+        if (isset($filter->tags)) {
+            foreach(json_decode($filter->tags) as $tag)
+            {
+                $tag_str .= $tag->value.',';
+            }
+            $tag_str = rtrim($tag_str, ',');
+        }
+        $filter->tags_tagify = $tag_str;
 
         return view('filters.edit', [
             'filter' => $filter,
