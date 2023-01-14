@@ -65,7 +65,6 @@
                 </div>
                 <div class="card-footer">
                     <span><strong>{{ $item['likes']['count'] }}</strong> <i class="fa-regular fa-heart"></i></span>
-<!--                    <span><strong>123</strong> <i class="fa-regular fa-heart"></i></span>-->
                 </div>
             </div>
             @endforeach

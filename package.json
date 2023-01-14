@@ -15,9 +15,5 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "@yaireo/tagify": "^4.17.6",
-        "flag-icon-css": "^4.1.7",
-        "flag-icons": "^6.6.6",
-        "jquery": "^3.6.3"
     }
 }
